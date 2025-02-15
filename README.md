@@ -1,8 +1,28 @@
-# React + Vite
+## Holiday Management Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This is the frontend service for the Holiday Management Application, built with React. It interacts with the Django backend API to fetch and display holiday data.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+
+1. Search for holidays by selecting a country and year.
+
+2. Filter holidays by month and type.
+
+3. Display holidays in a table or card format.
+
+4. View holiday details in a modal.
+
+5. Caching implemented on the backend to reduce API calls.
+
+## Setup Instructions
+   Installation
+
+   1. Clone the Repository
+      git clone https://github.com/anshaduk/HolidayManagement-Frontend.git
+   2. Install Dependencies
+      npm install
+   3. Start the Development Server
+      npm run dev
+    

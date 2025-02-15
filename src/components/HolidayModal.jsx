@@ -1,6 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { format } from 'date-fns';
 
 export default function HolidayModal({ holiday, onClose }) {
   return (
@@ -30,28 +29,26 @@ export default function HolidayModal({ holiday, onClose }) {
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
+                <Dialog.Title as="h3" className="text-lg font-medium text-gray-900">
                   {holiday.name}
                 </Dialog.Title>
-                <div className="mt-2">
+
+                <div className="mt-4 space-y-2">
                   <p className="text-sm text-gray-500">
-                    Date: {format(new Date(holiday.date.iso), 'MMMM d, yyyy')}
+                    <strong>Date:</strong> {new Date(holiday.date).toDateString()}
                   </p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    Type: {holiday.type.join(', ')}
+                  <p className="text-sm text-gray-500">
+                    <strong>Type:</strong> {holiday.type}
                   </p>
                   {holiday.description && (
                     <p className="text-sm text-gray-600 mt-2">{holiday.description}</p>
                   )}
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-6">
                   <button
                     type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200"
                     onClick={onClose}
                   >
                     Close

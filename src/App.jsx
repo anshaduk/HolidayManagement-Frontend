@@ -46,11 +46,7 @@ function App() {
             </div>
           )}
 
-          {!loading && !error && holidays.length > 0 && (
-            <div className="mt-8">
-              <HolidayList holidays={holidays} />
-            </div>
-          )}
+          {!loading && !error && <HolidayList holidays={holidays} />}
 
           {!loading && !error && holidays.length === 0 && (
             <div className="mt-8 text-center text-gray-500">

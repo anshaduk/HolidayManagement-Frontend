@@ -1,87 +1,104 @@
 import { useState } from 'react';
+import HolidayCard from './HolidayCard';
 
 export default function HolidayList({ holidays }) {
-  const [selectedHoliday, setSelectedHoliday] = useState(null); // State for selected holiday modal
-  const [searchTerm, setSearchTerm] = useState(''); // State for search term
-  const [currentPage, setCurrentPage] = useState(1); // State for pagination
-  const holidaysPerPage = 10; // Number of holidays per page
+  const [searchTerm, setSearchTerm] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const holidaysPerPage = 10;
 
-  // Filter holidays by name based on search term
-  const filteredHolidays = holidays.filter((holiday) =>
-    holiday.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Get unique holiday types
+  const types = [...new Set(holidays.map(holiday => holiday.type))];
 
-  // Pagination logic
-  const indexOfLastHoliday = currentPage * holidaysPerPage;
-  const indexOfFirstHoliday = indexOfLastHoliday - holidaysPerPage;
-  const currentHolidays = filteredHolidays.slice(indexOfFirstHoliday, indexOfLastHoliday);
+  // Filter holidays
+  const filteredHolidays = holidays.filter(holiday => {
+    const matchesSearch = holiday.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDate = (
+      (!startDate || new Date(holiday.date) >= new Date(startDate)) &&
+      (!endDate || new Date(holiday.date) <= new Date(endDate))
+    );
+    const matchesType = !selectedType || holiday.type === selectedType;
+    return matchesSearch && matchesDate && matchesType;
+  });
 
-  // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Pagination
+  const indexOfLast = currentPage * holidaysPerPage;
+  const indexOfFirst = indexOfLast - holidaysPerPage;
+  const currentHolidays = filteredHolidays.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredHolidays.length / holidaysPerPage);
 
   return (
-    <div className="space-y-4">
-      {/* Search bar for filtering holidays by name */}
-      <input
-        type="text"
-        placeholder="Search holidays by name..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      />
+    <div className="space-y-6 mt-8">
+      {/* Filters */}
+      <div className="bg-white p-4 rounded-lg shadow space-y-4">
+        <input
+          type="text"
+          placeholder="Search by holiday name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 border rounded-md"
+        />
 
-      {/* Display filtered holidays */}
-      {currentHolidays.map((holiday) => (
-        <div
-          key={holiday.id}
-          className="p-4 bg-white rounded-lg shadow cursor-pointer hover:bg-gray-50"
-          onClick={() => setSelectedHoliday(holiday)}
-        >
-          <h3 className="text-lg font-semibold text-gray-900">{holiday.name}</h3>
-          <p className="text-sm text-gray-500">{holiday.date}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Start Date</label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full p-2 border rounded-md"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700">End Date</label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full p-2 border rounded-md"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Type</label>
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="w-full p-2 border rounded-md"
+            >
+              <option value="">All Types</option>
+              {types.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
         </div>
-      ))}
+      </div>
 
-      {/* Pagination buttons */}
-      <div className="flex justify-center space-x-2">
-        {Array.from({ length: Math.ceil(filteredHolidays.length / holidaysPerPage) }, (_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => paginate(i + 1)}
-            className={`px-4 py-2 rounded-md ${
-              currentPage === i + 1
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            {i + 1}
-          </button>
+      {/* Holiday Cards */}
+      <div className="space-y-4">
+        {currentHolidays.map(holiday => (
+          <HolidayCard key={holiday.id} holiday={holiday} />
         ))}
       </div>
 
-      {/* Modal for holiday details */}
-      {selectedHoliday && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              {selectedHoliday.name}
-            </h2>
-            <p className="text-sm text-gray-700 mb-2">
-              <strong>Date:</strong> {selectedHoliday.date}
-            </p>
-            <p className="text-sm text-gray-700 mb-2">
-              <strong>Type:</strong> {selectedHoliday.type}
-            </p>
-            <p className="text-sm text-gray-700">
-              <strong>Description:</strong> {selectedHoliday.description}
-            </p>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center space-x-2">
+          {Array.from({ length: totalPages }, (_, i) => (
             <button
-              onClick={() => setSelectedHoliday(null)}
-              className="mt-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              key={i + 1}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-4 py-2 rounded-md ${
+                currentPage === i + 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200'
+              }`}
             >
-              Close
+              {i + 1}
             </button>
-          </div>
+          ))}
         </div>
       )}
     </div>
