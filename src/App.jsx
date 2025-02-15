@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getCachedHolidays } from './utils/api';
+import axios from 'axios';
 import SearchForm from './components/SearchForm';
 import HolidayList from './components/HolidayList';
 
@@ -12,8 +12,10 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const data = await getCachedHolidays(country, year, month);
-      setHolidays(data);
+      const response = await axios.get('http://127.0.0.1:8000/holidays/', {
+        params: { country, year, month },
+      });
+      setHolidays(response.data);
     } catch (err) {
       setError('Failed to fetch holidays. Please try again.');
       setHolidays([]);
