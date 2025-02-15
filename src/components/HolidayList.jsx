@@ -9,10 +9,10 @@ export default function HolidayList({ holidays }) {
   const [currentPage, setCurrentPage] = useState(1);
   const holidaysPerPage = 10;
 
-  // Get unique holiday types
+  
   const types = [...new Set(holidays.map(holiday => holiday.type))];
 
-  // Filter holidays
+  
   const filteredHolidays = holidays.filter(holiday => {
     const matchesSearch = holiday.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDate = (
@@ -31,7 +31,7 @@ export default function HolidayList({ holidays }) {
 
   return (
     <div className="space-y-6 mt-8">
-      {/* Filters */}
+      
       <div className="bg-white p-4 rounded-lg shadow space-y-4">
         <input
           type="text"
@@ -78,14 +78,14 @@ export default function HolidayList({ holidays }) {
         </div>
       </div>
 
-      {/* Holiday Cards */}
+      
       <div className="space-y-4">
         {currentHolidays.map(holiday => (
           <HolidayCard key={holiday.id} holiday={holiday} />
         ))}
       </div>
 
-      {/* Pagination */}
+      
       {totalPages > 1 && (
         <div className="flex justify-center space-x-2">
           {Array.from({ length: totalPages }, (_, i) => (

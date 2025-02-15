@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { COUNTRIES } from '../utils/constants';
 
 export default function SearchForm({ onSearch }) {
-  const [country, setCountry] = useState('US');
+  const [country, setCountry] = useState('');
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState('');
 
@@ -14,7 +14,7 @@ export default function SearchForm({ onSearch }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-white rounded-lg shadow">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Country Dropdown */}
+        
         <div>
           <label className="block text-sm font-medium text-gray-700">Country</label>
           <select
@@ -22,13 +22,15 @@ export default function SearchForm({ onSearch }) {
             onChange={(e) => setCountry(e.target.value)}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           >
+            <option value="" disabled>Select Country</option>
             {Object.entries(COUNTRIES).map(([code, name]) => (
               <option key={code} value={code}>{name}</option>
+
             ))}
           </select>
         </div>
 
-        {/* Year Input */}
+        
         <div>
           <label className="block text-sm font-medium text-gray-700">Year</label>
           <input
@@ -41,7 +43,7 @@ export default function SearchForm({ onSearch }) {
           />
         </div>
 
-        {/* Month Dropdown */}
+        
         <div>
           <label className="block text-sm font-medium text-gray-700">Month</label>
           <select
