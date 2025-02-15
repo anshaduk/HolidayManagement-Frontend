@@ -25,12 +25,19 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            Holiday Management
-          </h1>
+    <div
+    className="min-h-screen bg-gray-100 bg-cover bg-center"
+    style={{ backgroundImage: "url('https://images2.alphacoders.com/458/458495.jpg')" }}
+  >
+      <div className="max-w-7xl   sm:px-6 lg:px-8">
+        <div className="px-4  sm:px-0">
+        <h1 className=" font-GrechenFuemen text-5xl pt-5 mb-10 md:text-2xl font-extrabold uppercase 
+               bg-gradient-to-r from-cyan-300 via-blue-500 to-indigo-600 
+               bg-clip-text text-transparent 
+               drop-shadow-[3px_3px_0px_rgba(0,0,0,0.4)] 
+               shadow-sm shadow-blue-500/50 tracking-wide">
+  Yatra
+</h1>
 
           <SearchForm onSearch={handleSearch} />
 
@@ -49,7 +56,7 @@ function App() {
           {!loading && !error && <HolidayList holidays={holidays} />}
 
           {!loading && !error && holidays.length === 0 && (
-            <div className="mt-8 text-center text-gray-500">
+            <div className="mt-8 text-center text-red-700-500">
               No holidays found. Try searching for a different country or year.
             </div>
           )}
